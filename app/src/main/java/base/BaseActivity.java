@@ -1,8 +1,10 @@
 package base;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -15,7 +17,7 @@ import util.ToastUtil;
  * 功能描述:基类Activity
  */
 
-public abstract class BaseActivity extends Activity implements View.OnClickListener {
+public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener {
     private int layoutId;
     private ToastUtil toastUtil;
 
@@ -33,6 +35,7 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
         setContentView(layoutId);
         initBase();
         initView();
+        setListener();
         initData();
         initEvent();
     }
@@ -70,6 +73,12 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
      */
     protected abstract void initView();
 
+    protected abstract void setListener();
+
+    public void enterActivity(Class clz) {
+        Intent intent = new Intent(this,clz);
+        startActivity(intent);
+    }
 
     /**
      * 设置全屏(必须在getLayoutId方法中调用)
@@ -89,3 +98,6 @@ public abstract class BaseActivity extends Activity implements View.OnClickListe
         toastUtil = ToastUtil.getInstance(this);
     }
 }
+
+
+
