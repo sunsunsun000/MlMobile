@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -67,7 +68,14 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        isFirst = (boolean) SharedPreferencesUtil.getParam(this, CommonUtil.FIRSTTAG,true);
+        isFirst = (boolean) SharedPreferencesUtil.getParam(this, CommonUtil.FIRSTTAG, true);
+        Log.d("ZWW",isFirst+" ASD");
+        if (!isFirst) {
+            enterActivity(LoginActivity.class);
+            finish();
+        }
+        SharedPreferencesUtil.setParam(this, CommonUtil.FIRSTTAG, false);
+
         vp = findViewById(R.id.vp);
         iv1 = findViewById(R.id.iv1);
         iv2 = findViewById(R.id.iv2);
@@ -82,7 +90,7 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.bt_start:
                 enterActivity(LoginActivity.class);
                 finish();

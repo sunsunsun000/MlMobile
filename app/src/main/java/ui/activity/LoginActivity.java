@@ -10,6 +10,7 @@ import com.example.zw.mlmobile.R;
 import base.BaseActivity;
 import base.MlApplication;
 import ui.view.NoConnectDialog;
+import util.CommonUtil;
 
 /**
  * Created by zhongwang on 2018/1/9.
@@ -63,10 +64,19 @@ public class LoginActivity extends BaseActivity {
                     showNoConnectDialog();
                     return;
                 }
+                if(CommonUtil.isEmpty(edUserName)){
+                    showToast(R.string.nousername);
+                    return;
+                }
+                if(CommonUtil.isEmpty(edPassword)){
+                    showToast(R.string.nopassword);
+                    return;
+                }
                 Log.d(TAG, "server connect");
                 // TODO: 2018/1/9 连接相关 
                 break;
             case R.id.btCancel:
+                finish();
                 break;
         }
     }

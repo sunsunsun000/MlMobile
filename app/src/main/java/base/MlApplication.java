@@ -7,7 +7,7 @@ import android.app.Application;
  */
 
 public class MlApplication extends Application {
-    private boolean isConnected = false;
+    private boolean isConnected = true;
 
     public boolean isConnected() {
         return isConnected;
