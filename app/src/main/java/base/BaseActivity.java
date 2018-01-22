@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 
 import util.ToastUtil;
 
@@ -96,6 +97,12 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     private void initBase() {
         toastUtil = ToastUtil.getInstance(this);
+    }
+    public static boolean isEmpty(EditText editText){
+        return editText.getEditableText().toString().trim().equals("");
+    }
+    public static String getString(EditText editText){
+        return editText.getEditableText().toString();
     }
 }
 

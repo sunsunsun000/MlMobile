@@ -8,7 +8,5 @@ import android.widget.EditText;
 
 public class CommonUtil {
     public final static String FIRSTTAG="FITSTTAG";
-    public static boolean isEmpty(EditText editText){
-        return editText.getEditableText().toString().trim().equals("");
-    }
+
 }

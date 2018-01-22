@@ -24,7 +24,7 @@ public class LoginActivity extends BaseActivity {
     private Button btCancel;
     private MlApplication mlApplication;
     private NoConnectDialog noConnectDialog;
-
+    private String username,password;
     @Override
     public int getLayoutId() {
         setFullScreen();
@@ -64,13 +64,17 @@ public class LoginActivity extends BaseActivity {
                     showNoConnectDialog();
                     return;
                 }
-                if(CommonUtil.isEmpty(edUserName)){
+                if(isEmpty(edUserName)){
                     showToast(R.string.nousername);
                     return;
+                }else {
+                    username=getString(edUserName);
                 }
-                if(CommonUtil.isEmpty(edPassword)){
+                if(isEmpty(edPassword)){
                     showToast(R.string.nopassword);
                     return;
+                }else {
+                   password =  getString(edPassword);
                 }
                 Log.d(TAG, "server connect");
                 // TODO: 2018/1/9 连接相关 
