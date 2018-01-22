@@ -8,6 +8,5 @@
     <string name="dialogtip">友情提示</string>
     <string name="noconnect">暂未连接到机器</string>
     <string name="suretip">确认</string>
-    <string name="nousername">用户名为空</string>
-    <string name="nopassword">密码为空</string>
+    <string name="nousername">输入不完整</string>
 </resources>

@@ -10,6 +10,12 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 
+import com.google.gson.Gson;
+
+import java.io.BufferedReader;
+import java.io.PrintWriter;
+
+import util.MlConnectUtil;
 import util.ToastUtil;
 
 /**
@@ -21,6 +27,11 @@ import util.ToastUtil;
 public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener {
     private int layoutId;
     private ToastUtil toastUtil;
+    protected MlApplication mlApplication;
+    protected Gson gson;
+    protected MlConnectUtil mlConnectUtil;
+    protected BufferedReader bufferedReader;
+    protected PrintWriter printWriter;
 
     /**
      * 设置界面布局Layout
@@ -77,7 +88,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected abstract void setListener();
 
     public void enterActivity(Class clz) {
-        Intent intent = new Intent(this,clz);
+        Intent intent = new Intent(this, clz);
         startActivity(intent);
     }
 
@@ -97,11 +108,18 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     private void initBase() {
         toastUtil = ToastUtil.getInstance(this);
+        mlApplication = (MlApplication) getApplication();
+        gson = mlApplication.getGson();
+        mlConnectUtil = mlApplication.getMlConnectUtil();
+        printWriter = mlConnectUtil.getPrintWriter();
+        bufferedReader = mlConnectUtil.getBufferedReader();
     }
-    public static boolean isEmpty(EditText editText){
+
+    public static boolean isEmpty(EditText editText) {
         return editText.getEditableText().toString().trim().equals("");
     }
-    public static String getString(EditText editText){
+
+    public static String getString(EditText editText) {
         return editText.getEditableText().toString();
     }
 }

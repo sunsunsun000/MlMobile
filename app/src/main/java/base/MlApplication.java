@@ -13,6 +13,16 @@ import util.MlConnectUtil;
 public class MlApplication extends Application {
     private boolean isConnected = false;
     private Gson gson;
+    private MlConnectUtil mlConnectUtil;
+
+    public MlConnectUtil getMlConnectUtil() {
+        return mlConnectUtil;
+    }
+
+    public void setMlConnectUtil(MlConnectUtil mlConnectUtil) {
+        this.mlConnectUtil = mlConnectUtil;
+    }
+
     public Gson getGson() {
         return gson;
     }
@@ -38,7 +48,8 @@ public class MlApplication extends Application {
     }
 
     private void initMlConnect() {
-        MlConnectUtil.ConnectServer("192.168.3.135",this);
+        mlConnectUtil =MlConnectUtil.getMlConnectUtil(this);
+        mlConnectUtil.ConnectServer("192.168.3.135",this);
     }
     private void initLib() {
         gson = new Gson();

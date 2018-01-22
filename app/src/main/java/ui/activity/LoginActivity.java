@@ -8,9 +8,11 @@ import android.widget.EditText;
 import com.example.zw.mlmobile.R;
 
 import base.BaseActivity;
-import base.MlApplication;
+import base.SocketModule;
+import dao.MobileUser;
 import ui.view.NoConnectDialog;
-import util.CommonUtil;
+import util.MlConCommonUtil;
+import util.MlConnectUtil;
 
 /**
  * Created by zhongwang on 2018/1/9.
@@ -22,9 +24,11 @@ public class LoginActivity extends BaseActivity {
     private EditText edPassword;
     private Button btLogin;
     private Button btCancel;
-    private MlApplication mlApplication;
     private NoConnectDialog noConnectDialog;
-    private String username,password;
+    private String username, password;
+
+    private SocketModule socketModule;
+
     @Override
     public int getLayoutId() {
         setFullScreen();
@@ -38,7 +42,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        mlApplication = (MlApplication) getApplication();
+
     }
 
     @Override
@@ -64,25 +68,31 @@ public class LoginActivity extends BaseActivity {
                     showNoConnectDialog();
                     return;
                 }
-                if(isEmpty(edUserName)){
+                if (isEmpty(edUserName) || isEmpty(edPassword)) {
                     showToast(R.string.nousername);
                     return;
-                }else {
-                    username=getString(edUserName);
+                } else {
+                    username = getString(edUserName);
+                    password = getString(edPassword);
                 }
-                if(isEmpty(edPassword)){
-                    showToast(R.string.nopassword);
-                    return;
-                }else {
-                   password =  getString(edPassword);
-                }
-                Log.d(TAG, "server connect");
-                // TODO: 2018/1/9 连接相关 
+sendDataToMotor();
                 break;
             case R.id.btCancel:
                 finish();
                 break;
         }
+    }
+
+    private void sendDataToMotor() {
+        if (socketModule == null)
+            socketModule = new SocketModule();
+        socketModule.setOperateType(MlConCommonUtil.LOGIN);
+        socketModule.setBaseModule(gson.toJson(new MobileUser(username, password)));
+         mlConnectUtil.getDataFromMotor(socketModule, new MlConnectUtil.OperateData() {
+            @Override
+            public void handlerData(SocketModule socketModule) {
+            }
+        });
     }
 
     /**

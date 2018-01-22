@@ -6,4 +6,5 @@ package util;
 
 public class MlConCommonUtil {
     public static final String CONNECTSUCESS="CONNECTSUCESS";
+    public static final String LOGIN="LOGIN";
 }
