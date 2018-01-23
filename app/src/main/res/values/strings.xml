@@ -9,4 +9,6 @@
     <string name="noconnect">暂未连接到机器</string>
     <string name="suretip">确认</string>
     <string name="nousername">输入不完整</string>
+    <string name="loading">程序加载中</string>
+    <string name="loginfailure">登陆失败</string>
 </resources>

@@ -1,5 +1,6 @@
 package util;
 
+import android.os.Handler;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -37,6 +38,7 @@ public class MlConnectUtil {
     private  ExecutorService threadPool;
     private  MlApplication mlApplication;
     private static  MlConnectUtil mlConnectUtil;
+    private Handler handler;
     private Gson gson;
     public int getPort() {
         return port;
@@ -49,6 +51,7 @@ public class MlConnectUtil {
     public MlConnectUtil(MlApplication application) {
         mlApplication = application;
         gson = mlApplication.getGson();
+        handler = new Handler();
         Log.d("ZWW",mlApplication.isConnected()+" sssss");
     }
 
@@ -86,13 +89,19 @@ public class MlConnectUtil {
         }.start();
     }
 
-    private void startObserver(OperateData operateData) {
+    private void startObserver(final OperateData operateData) {
         try {
         while(true){
             if(inputStream!=null&inputStream.available()!=0){
               String moduleRes=  bufferedReader.readLine();
               Log.d("zww","接收到来自服务器的响应 内容如下"+moduleRes);
-              SocketModule socketModule = gson.fromJson(moduleRes,SocketModule.class);
+              final SocketModule socketModule = gson.fromJson(moduleRes,SocketModule.class);
+              handler.post(new Runnable() {
+                  @Override
+                  public void run() {
+                      operateData.handlerData(socketModule);
+                  }
+              });
             }
         }
         } catch (IOException e) {
@@ -112,9 +121,7 @@ public class MlConnectUtil {
             @Override
             public void run() {
                 try {
-                    if (clientSocket != null) {
-                        clientSocket.close();
-                    }
+                    closeSocket();
                     clientSocket = new Socket(ipAddress, port);
                     Log.d("zww","开始测试连接");
                     inputStream  = clientSocket.getInputStream();
@@ -140,7 +147,21 @@ public class MlConnectUtil {
             }
         });
     }
+
+    /**
+     * 定义接口处理数据
+     */
     public interface OperateData{
        void handlerData(SocketModule socketModule);
+    }
+
+    public void closeSocket(){
+        if (clientSocket != null) {
+            try {
+                clientSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

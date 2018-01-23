@@ -1,6 +1,7 @@
 package base;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.google.gson.Gson;
 
@@ -32,7 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected MlConnectUtil mlConnectUtil;
     protected BufferedReader bufferedReader;
     protected PrintWriter printWriter;
-
+    protected ProgressDialog progressDialog;
     /**
      * 设置界面布局Layout
      *
@@ -91,7 +93,11 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         Intent intent = new Intent(this, clz);
         startActivity(intent);
     }
-
+public void enterActivityAndKillSelf(Class clz){
+    Intent intent = new Intent(this, clz);
+    startActivity(intent);
+    finish();
+}
     /**
      * 设置全屏(必须在getLayoutId方法中调用)
      */
@@ -113,6 +119,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         mlConnectUtil = mlApplication.getMlConnectUtil();
         printWriter = mlConnectUtil.getPrintWriter();
         bufferedReader = mlConnectUtil.getBufferedReader();
+        progressDialog = new ProgressDialog(this);
+
     }
 
     public static boolean isEmpty(EditText editText) {

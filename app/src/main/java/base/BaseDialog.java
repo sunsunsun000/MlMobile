@@ -22,7 +22,7 @@ public abstract class  BaseDialog extends Dialog implements View.OnClickListener
     private  int[] listenedItems;
     private  int layoutResID;
     private  Context context;
-
+    private boolean isHidden = true;
     public BaseDialog(@NonNull Context context) {
         super(context, R.style.dialog);
     }
@@ -60,7 +60,7 @@ public abstract class  BaseDialog extends Dialog implements View.OnClickListener
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.width = display.getWidth() *8 / 10;
         getWindow().setAttributes(lp);
-         setCanceledOnTouchOutside(true);// 点击Dialog外部消失
+         setCanceledOnTouchOutside(isHidden);// 点击Dialog外部消失
         //遍历控件id,添加点击事件
         for (int id : listenedItems) {
             findViewById(id).setOnClickListener(this);

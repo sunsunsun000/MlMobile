@@ -1,11 +1,14 @@
 package ui.activity;
 
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.zw.mlmobile.R;
+
+import java.io.IOException;
 
 import base.BaseActivity;
 import base.SocketModule;
@@ -28,6 +31,7 @@ public class LoginActivity extends BaseActivity {
     private String username, password;
 
     private SocketModule socketModule;
+    private Boolean isLogined= false;
 
     @Override
     public int getLayoutId() {
@@ -75,7 +79,7 @@ public class LoginActivity extends BaseActivity {
                     username = getString(edUserName);
                     password = getString(edPassword);
                 }
-sendDataToMotor();
+                sendDataToMotor();
                 break;
             case R.id.btCancel:
                 finish();
@@ -88,11 +92,43 @@ sendDataToMotor();
             socketModule = new SocketModule();
         socketModule.setOperateType(MlConCommonUtil.LOGIN);
         socketModule.setBaseModule(gson.toJson(new MobileUser(username, password)));
-         mlConnectUtil.getDataFromMotor(socketModule, new MlConnectUtil.OperateData() {
+        progressDialog.setTitle(R.string.loading);
+        progressDialog.show();
+        mlConnectUtil.getDataFromMotor(socketModule, new MlConnectUtil.OperateData() {
             @Override
             public void handlerData(SocketModule socketModule) {
+                if (progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+                isLogined = gson.fromJson(socketModule.getBaseModule(), Boolean.class);
+                if (isLogined) {
+                    enterActivityAndKillSelf(HomeActivity.class);
+                } else {
+                    showToast(R.string.loginfailure);
+                }
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //判断是否已经登陆，如果未登陆则断开与服务器连接
+        if(!isLogined){
+            Log.d("zww","应用程序退出中，暂未登陆成功，断开与服务器所有连接");
+            printWriter.close();
+            try {
+                bufferedReader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mlConnectUtil.closeSocket();
+            android.os.Process.killProcess(android.os.Process.myPid());    //获取PID
+            System.exit(0);   //常规java、c#的标准退出法，返回值为0代表正常退出
+
+
+
+        }
     }
 
     /**
