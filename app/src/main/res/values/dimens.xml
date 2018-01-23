@@ -11,5 +11,5 @@
     <dimen name="dialog_toptext_padding">8sp</dimen>
     <dimen name="dialog_content_height">80sp</dimen>
     <dimen name="dialog_bottom_heigth">40sp</dimen>
-
+    <dimen name="navigation_heigth">40sp</dimen>
 </resources>

@@ -11,4 +11,8 @@
     <string name="nousername">输入不完整</string>
     <string name="loading">程序加载中</string>
     <string name="loginfailure">登陆失败</string>
+    <string name="calibration">标定</string>
+    <string name="check">检测</string>
+    <string name="search">查询</string>
+    <string name="seeting">设置</string>
 </resources>

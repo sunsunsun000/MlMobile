@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/calibration"
+        android:icon="@mipmap/calibration"
+        android:title="@string/calibration" />
+    <item
+        android:id="@+id/check"
+        android:icon="@mipmap/check"
+        android:title="@string/check" />
+    <item
+        android:id="@+id/search"
+        android:icon="@mipmap/search"
+        android:title="@string/search" />
+    <item
+        android:id="@+id/seeting"
+        android:icon="@mipmap/seeting"
+        android:title="@string/seeting" />
+</menu>

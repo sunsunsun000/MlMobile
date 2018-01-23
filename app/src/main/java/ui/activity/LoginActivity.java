@@ -97,10 +97,10 @@ public class LoginActivity extends BaseActivity {
         mlConnectUtil.getDataFromMotor(socketModule, new MlConnectUtil.OperateData() {
             @Override
             public void handlerData(SocketModule socketModule) {
+                isLogined = gson.fromJson(socketModule.getBaseModule(), Boolean.class);
                 if (progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
-                isLogined = gson.fromJson(socketModule.getBaseModule(), Boolean.class);
                 if (isLogined) {
                     enterActivityAndKillSelf(HomeActivity.class);
                 } else {
