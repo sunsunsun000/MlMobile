@@ -5,28 +5,24 @@ package base;
  */
 
 public class SocketModule {
-    /**
-     * 操作类型 可以定义一个公共类来存放操作类型数据
-     */
     private String operateType;
-    /**
-     * 需要的数据 （所有的数据包括实体类 字符 布尔 等 封装成json字符串传递）
-     */
-    private String baseModule;
+    private SocketInfo socketInfo;
 
     public String getOperateType() {
         return operateType;
+    }
+
+    public SocketInfo getSocketInfo() {
+        return socketInfo;
+    }
+
+    public void setSocketInfo(SocketInfo socketInfo) {
+        this.socketInfo = socketInfo;
     }
 
     public void setOperateType(String operateType) {
         this.operateType = operateType;
     }
 
-    public String getBaseModule() {
-        return baseModule;
-    }
 
-    public void setBaseModule(String baseModule) {
-        this.baseModule = baseModule;
-    }
 }

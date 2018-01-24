@@ -2,8 +2,12 @@ package ui.activity;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.os.Handler;
+import android.os.Message;
+import android.os.RemoteException;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -37,17 +41,17 @@ public class HomeActivity extends BaseActivity {
                     switchFragment(calibrationFragment);
                     return true;
                 case R.id.check:
-                    if(checkFragment==null)
+                    if (checkFragment == null)
                         checkFragment = new CheckFragment();
                     switchFragment(checkFragment);
                     return true;
                 case R.id.search:
-                    if(searchFragment==null)
+                    if (searchFragment == null)
                         searchFragment = new SearchFragment();
                     switchFragment(searchFragment);
                     return true;
                 case R.id.seeting:
-                    if(seetingFragment==null)
+                    if (seetingFragment == null)
                         seetingFragment = new SeetingFragment();
                     switchFragment(seetingFragment);
                     return true;
@@ -60,6 +64,8 @@ public class HomeActivity extends BaseActivity {
     private FragmentTransaction mfragmentTransaction;
     private BaseFragment mCurrentFrgment;
     private BottomNavigationView navigation;
+    private boolean isExit = false;
+    private Handler handler;
 
     @Override
     public int getLayoutId() {
@@ -74,6 +80,14 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void initData() {
         navigation.setSelectedItemId(R.id.calibration);
+        handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                isExit = false;
+
+            }
+        };
     }
 
     @Override
@@ -104,6 +118,27 @@ public class HomeActivity extends BaseActivity {
         }
         mfragmentTransaction.commit();
         mCurrentFrgment = (BaseFragment) fragment;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            exit();
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void exit() {
+        if (!isExit) {
+            isExit = true;
+            showToast(R.string.exitinfo);
+            // 利用handler延迟发送更改状态信息
+            handler.sendEmptyMessageDelayed(0, 2000);
+        } else {
+            mlConnectUtil.closeSocket();
+            System.exit(0);
+        }
     }
 
     @Override

@@ -11,6 +11,7 @@ import com.example.zw.mlmobile.R;
 import java.io.IOException;
 
 import base.BaseActivity;
+import base.SocketInfo;
 import base.SocketModule;
 import dao.MobileUser;
 import ui.view.NoConnectDialog;
@@ -31,7 +32,7 @@ public class LoginActivity extends BaseActivity {
     private String username, password;
 
     private SocketModule socketModule;
-    private Boolean isLogined= false;
+    private Boolean isLogined = false;
 
     @Override
     public int getLayoutId() {
@@ -90,18 +91,20 @@ public class LoginActivity extends BaseActivity {
     private void sendDataToMotor() {
         if (socketModule == null)
             socketModule = new SocketModule();
+        if (socketModule.getSocketInfo() == null)
+            socketModule.setSocketInfo(new SocketInfo());
         socketModule.setOperateType(MlConCommonUtil.LOGIN);
-        socketModule.setBaseModule(gson.toJson(new MobileUser(username, password)));
+        socketModule.getSocketInfo().setBaseModule(gson.toJson(new MobileUser(username, password)));
         progressDialog.setTitle(R.string.loading);
         progressDialog.show();
         mlConnectUtil.getDataFromMotor(socketModule, new MlConnectUtil.OperateData() {
             @Override
             public void handlerData(SocketModule socketModule) {
-                isLogined = gson.fromJson(socketModule.getBaseModule(), Boolean.class);
-                if (progressDialog.isShowing()) {
+               if (progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
-                if (isLogined) {
+                if (socketModule.getSocketInfo().getBaseModule().trim().contains("true")) {
+                   isLogined=true;
                     enterActivityAndKillSelf(HomeActivity.class);
                 } else {
                     showToast(R.string.loginfailure);
@@ -114,18 +117,11 @@ public class LoginActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         //判断是否已经登陆，如果未登陆则断开与服务器连接
-        if(!isLogined){
-            Log.d("zww","应用程序退出中，暂未登陆成功，断开与服务器所有连接");
-            printWriter.close();
-            try {
-                bufferedReader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if (!isLogined) {
+            Log.d("zww", "应用程序退出中，暂未登陆成功，断开与服务器所有连接");
             mlConnectUtil.closeSocket();
             android.os.Process.killProcess(android.os.Process.myPid());    //获取PID
             System.exit(0);   //常规java、c#的标准退出法，返回值为0代表正常退出
-
 
 
         }

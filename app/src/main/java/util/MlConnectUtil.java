@@ -25,21 +25,22 @@ public class MlConnectUtil {
     /**
      * 端口号  默认888可以通关get set方法修改
      */
-    private  int port = 8888;
+    private int port = 8888;
     /**
      * 与电机之间通信 获取数据
      */
-    private  BufferedReader bufferedReader;
+    private BufferedReader bufferedReader;
     /**
      * 与电机之间通信 发送指令
      */
-    private  PrintWriter printWriter;
-    private  InputStream inputStream;
-    private  ExecutorService threadPool;
-    private  MlApplication mlApplication;
-    private static  MlConnectUtil mlConnectUtil;
+    private PrintWriter printWriter;
+    private InputStream inputStream;
+    private ExecutorService threadPool;
+    private MlApplication mlApplication;
+    private static MlConnectUtil mlConnectUtil;
     private Handler handler;
     private Gson gson;
+
     public int getPort() {
         return port;
     }
@@ -52,38 +53,40 @@ public class MlConnectUtil {
         mlApplication = application;
         gson = mlApplication.getGson();
         handler = new Handler();
-        Log.d("ZWW",mlApplication.isConnected()+" sssss");
+
     }
 
-    public static MlConnectUtil getMlConnectUtil(MlApplication application){
-        if(mlConnectUtil==null)
+    public static MlConnectUtil getMlConnectUtil(MlApplication application) {
+        if (mlConnectUtil == null)
             mlConnectUtil = new MlConnectUtil(application);
-                    return mlConnectUtil;
+        return mlConnectUtil;
     }
-    private  Socket clientSocket;
 
-    public  BufferedReader getBufferedReader() {
+    private Socket clientSocket;
+
+    public BufferedReader getBufferedReader() {
         return bufferedReader;
     }
 
-    public  void setBufferedReader(BufferedReader bufferedReader) {
+    public void setBufferedReader(BufferedReader bufferedReader) {
         this.bufferedReader = bufferedReader;
     }
 
-    public  PrintWriter getPrintWriter() {
+    public PrintWriter getPrintWriter() {
         return printWriter;
     }
 
-    public  void setPrintWriter(PrintWriter printWriter) {
+    public void setPrintWriter(PrintWriter printWriter) {
         this.printWriter = printWriter;
     }
-    public  void getDataFromMotor(final SocketModule socketModule, final OperateData operateData){
-        Log.d("zww","数据填充完成，准备发送至服务端");
-        new Thread(){
+
+    public void getDataFromMotor(final SocketModule socketModule, final OperateData operateData) {
+        Log.d("zww", "数据填充完成，准备发送至服务端");
+        new Thread() {
             @Override
             public void run() {
                 super.run();
-              printWriter.println(mlApplication.getGson().toJson(socketModule));
+                printWriter.println(mlApplication.getGson().toJson(socketModule));
                 startObserver(operateData);
             }
         }.start();
@@ -91,19 +94,19 @@ public class MlConnectUtil {
 
     private void startObserver(final OperateData operateData) {
         try {
-        while(true){
-            if(inputStream!=null&inputStream.available()!=0){
-              String moduleRes=  bufferedReader.readLine();
-              Log.d("zww","接收到来自服务器的响应 内容如下"+moduleRes);
-              final SocketModule socketModule = gson.fromJson(moduleRes,SocketModule.class);
-              handler.post(new Runnable() {
-                  @Override
-                  public void run() {
-                      operateData.handlerData(socketModule);
-                  }
-              });
+            while (true) {
+                if (inputStream != null & inputStream.available() != 0) {
+                    String moduleRes = bufferedReader.readLine();
+                    Log.d("zww", "接收到来自服务器的响应 内容如下" + moduleRes);
+                    final SocketModule socketModule = gson.fromJson(moduleRes, SocketModule.class);
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            operateData.handlerData(socketModule);
+                        }
+                    });
+                }
             }
-        }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -115,7 +118,7 @@ public class MlConnectUtil {
      *
      * @param ipAddress ip地址
      */
-    public  void ConnectServer(final String ipAddress, final MlApplication mlApplication) {
+    public void ConnectServer(final String ipAddress, final MlApplication mlApplication) {
         threadPool = Executors.newCachedThreadPool();
         threadPool.execute(new Runnable() {
             @Override
@@ -123,21 +126,23 @@ public class MlConnectUtil {
                 try {
                     closeSocket();
                     clientSocket = new Socket(ipAddress, port);
-                    Log.d("zww","开始测试连接");
-                    inputStream  = clientSocket.getInputStream();
+                    Log.d("zww", "开始测试连接");
+                    inputStream = clientSocket.getInputStream();
                     bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                    Log.d("zww", "连接成功");
                     String res = bufferedReader.readLine();
+                    Log.d("zww", res);
                     mlApplication.setConnected(res.equals(MlConCommonUtil.CONNECTSUCESS));
-                    if(mlApplication.isConnected()){
-                        printWriter = new PrintWriter(clientSocket.getOutputStream(),true);
+                    if (mlApplication.isConnected()) {
+                        printWriter = new PrintWriter(clientSocket.getOutputStream(), true);
                     }
-                    Log.d("zww",res);
+
                 } catch (IOException e) {
                     e.printStackTrace();
                     Log.d("zww", "clientSocket Create faulure");
-                    if(printWriter!=null)
+                    if (printWriter != null)
                         printWriter.close();
-                    if(bufferedReader!=null)
+                    if (bufferedReader != null)
                         try {
                             bufferedReader.close();
                         } catch (IOException e1) {
@@ -151,11 +156,23 @@ public class MlConnectUtil {
     /**
      * 定义接口处理数据
      */
-    public interface OperateData{
-       void handlerData(SocketModule socketModule);
+    public interface OperateData {
+        void handlerData(SocketModule socketModule);
     }
 
-    public void closeSocket(){
+    public void closeSocket() {
+        try {
+            if (printWriter != null)
+                printWriter.close();
+            if (inputStream != null) {
+                inputStream.close();
+            }
+            if (bufferedReader != null) {
+                bufferedReader.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         if (clientSocket != null) {
             try {
                 clientSocket.close();

@@ -69,7 +69,6 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void initView() {
         isFirst = (boolean) SharedPreferencesUtil.getParam(this, CommonUtil.FIRSTTAG, true);
-        Log.d("ZWW",isFirst+" ASD");
         if (!isFirst) {
             enterActivity(LoginActivity.class);
             finish();
