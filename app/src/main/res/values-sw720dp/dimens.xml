@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+	<dimen name="button_cicle_radio">100.0000sp</dimen>
+	<dimen name="button_text_size">30.0000sp</dimen>
+	<dimen name="button_margin">10.0000sp</dimen>
+	<dimen name="button_border_width">1.0000sp</dimen>
+	<dimen name="button_padding">10.0000sp</dimen>
+	<dimen name="edit_padding">10.0000sp</dimen>
+	<dimen name="edit_text_size">30.0000sp</dimen>
+	<dimen name="dialog_border_size">10.0000sp</dimen>
+	<dimen name="dialog_toptext_padding">16.0000sp</dimen>
+	<dimen name="dialog_content_height">160.0000sp</dimen>
+	<dimen name="dialog_bottom_heigth">80.0000sp</dimen>
+	<dimen name="navigation_heigth">80.0000sp</dimen>
+	<dimen name="seetingitemheigth">80.0000sp</dimen>
+	<dimen name="seetingitempadding">10.0000sp</dimen>
+</resources>
