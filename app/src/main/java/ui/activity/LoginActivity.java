@@ -121,7 +121,7 @@ public class LoginActivity extends BaseActivity {
             Log.d("zww", "应用程序退出中，暂未登陆成功，断开与服务器所有连接");
             mlConnectUtil.closeSocket();
             android.os.Process.killProcess(android.os.Process.myPid());    //获取PID
-            System.exit(0);   //常规java、c#的标准退出法，返回值为0代表正常退出
+//            System.exit(0);   // 常规java、c#的标准退出法，返回值为0代表正常退出
 
 
         }

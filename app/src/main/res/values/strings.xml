@@ -16,4 +16,5 @@
     <string name="search">查询</string>
     <string name="seeting">设置</string>
     <string name="exitinfo">再按一次退出程序</string>
+    <string name="about">关于我们</string>
 </resources>
