@@ -14,4 +14,5 @@
     <dimen name="navigation_heigth">40sp</dimen>
     <dimen name="seetingitemheigth">40sp</dimen>
     <dimen name="seetingitempadding">5sp</dimen>
+    <item name="item_border" type="dimen" format="float">0.5sp</item>
 </resources>

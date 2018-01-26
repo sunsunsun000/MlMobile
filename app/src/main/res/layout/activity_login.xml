@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/bg_white_edittext"
             android:hint="@string/loginnametip"
-            android:inputType="text" />
+            android:inputType="textVisiblePassword" />
 
         <EditText
             android:id="@+id/edPassword"

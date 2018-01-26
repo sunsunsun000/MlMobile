@@ -11,7 +11,7 @@ import util.MlConnectUtil;
  */
 
 public class MlApplication extends Application {
-    private boolean isConnected = false;
+    private boolean isConnected = true;//调试模式
     private Gson gson;
     private MlConnectUtil mlConnectUtil;
 

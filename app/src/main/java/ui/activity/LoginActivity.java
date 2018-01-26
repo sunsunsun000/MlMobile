@@ -1,6 +1,5 @@
 package ui.activity;
 
-import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -8,13 +7,11 @@ import android.widget.EditText;
 
 import com.example.zw.mlmobile.R;
 
-import java.io.IOException;
-
 import base.BaseActivity;
 import base.SocketInfo;
 import base.SocketModule;
 import dao.MobileUser;
-import ui.view.NoConnectDialog;
+import ui.view.TipDialog;
 import util.MlConCommonUtil;
 import util.MlConnectUtil;
 
@@ -28,7 +25,7 @@ public class LoginActivity extends BaseActivity {
     private EditText edPassword;
     private Button btLogin;
     private Button btCancel;
-    private NoConnectDialog noConnectDialog;
+    private TipDialog tipDialog;
     private String username, password;
 
     private SocketModule socketModule;
@@ -110,6 +107,18 @@ public class LoginActivity extends BaseActivity {
                     showToast(R.string.loginfailure);
                 }
             }
+
+            @Override
+            public void noData() {
+                if (progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+
+                //调试代码
+                isLogined = true;
+                enterActivityAndKillSelf(HomeActivity.class);
+
+            }
         });
     }
 
@@ -131,8 +140,8 @@ public class LoginActivity extends BaseActivity {
      * 展示通信未连接对话框
      */
     private void showNoConnectDialog() {
-        if (noConnectDialog == null)
-            noConnectDialog = new NoConnectDialog(this);
-        noConnectDialog.show();
+        if (tipDialog == null)
+            tipDialog = new TipDialog(this);
+        tipDialog.show();
     }
 }

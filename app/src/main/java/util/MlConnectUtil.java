@@ -86,8 +86,13 @@ public class MlConnectUtil {
             @Override
             public void run() {
                 super.run();
-                printWriter.println(mlApplication.getGson().toJson(socketModule));
-                startObserver(operateData);
+                    if(printWriter==null){
+                        operateData.noData();
+                        return;
+                    }
+                    printWriter.println(mlApplication.getGson().toJson(socketModule));
+                    startObserver(operateData);
+
             }
         }.start();
     }
@@ -158,6 +163,7 @@ public class MlConnectUtil {
      */
     public interface OperateData {
         void handlerData(SocketModule socketModule);
+        void noData();
     }
 
     public void closeSocket() {
